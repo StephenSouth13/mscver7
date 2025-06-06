@@ -1,0 +1,18 @@
+RewriteEngine On
+
+# 1. Chuyển redirect index.html -> / (trang chủ)
+RewriteCond %{THE_REQUEST} /index\.html [NC]
+RewriteRule ^index\.html$ / [R=301,L]
+
+# 2. Redirect URL có đuôi .html sang URL không đuôi (để thống nhất URL)
+RewriteCond %{THE_REQUEST} \s([^\s]+)\.html [NC]
+RewriteRule ^ %1 [R=301,L]
+
+# 3. Nội bộ rewrite URL không đuôi thành .html nếu tồn tại file .html tương ứng
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.html -f
+RewriteRule ^(.*)$ $1.html [L]
+
+# 4. Đặt index file mặc định
+DirectoryIndex index.html
